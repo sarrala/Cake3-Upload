@@ -1,5 +1,5 @@
 <?php
-namespace Xety\Cake3Upload\Test\Fixture;
+namespace sarrala\Cake3Upload\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
 

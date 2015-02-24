@@ -1,5 +1,5 @@
 <?php
-namespace Xety\Cake3Upload\Test\TestCase\Model\Behavior;
+namespace sarrala\Cake3Upload\Test\TestCase\Model\Behavior;
 
 use Cake\Event\Event;
 use Cake\Filesystem\Folder;
@@ -14,7 +14,7 @@ class UploadBehaviorTest extends TestCase {
  *
  * @var array
  */
-	public $fixtures = ['plugin.Xety\Cake3Upload.users'];
+	public $fixtures = ['plugin.sarrala\Cake3Upload.users'];
 
 /**
  * setUp
@@ -54,7 +54,7 @@ class UploadBehaviorTest extends TestCase {
 			'size' => 201
 		];
 
-		$this->Model->addBehavior('Xety/Cake3Upload.Upload', [
+		$this->Model->addBehavior('sarrala/Cake3Upload.Upload', [
 			'fields' => [
 				'avatar' => [
 					'path' => 'upload' . DS . ':id' . DS . ':id'
@@ -84,7 +84,7 @@ class UploadBehaviorTest extends TestCase {
 			'size' => 201
 		];
 
-		$this->Model->addBehavior('Xety/Cake3Upload.Upload', [
+		$this->Model->addBehavior('sarrala/Cake3Upload.Upload', [
 			'fields' => [
 				'avatar' => []
 			]
@@ -111,7 +111,7 @@ class UploadBehaviorTest extends TestCase {
 			'size' => 201
 		];
 
-		$this->Model->addBehavior('Xety/Cake3Upload.Upload', [
+		$this->Model->addBehavior('sarrala/Cake3Upload.Upload', [
 			'fields' => [
 				'avatar' => [
 					'path' => 'upload' . DS . ':id' . DS . ':id'
@@ -141,7 +141,7 @@ class UploadBehaviorTest extends TestCase {
 			'size' => 201
 		];
 
-		$this->Model->addBehavior('Xety/Cake3Upload.Upload', [
+		$this->Model->addBehavior('sarrala/Cake3Upload.Upload', [
 			'fields' => [
 				'avatar' => [
 					'path' => 'upload' . DS . ':id' . DS . ':id',
@@ -171,7 +171,7 @@ class UploadBehaviorTest extends TestCase {
 			'size' => 201
 		];
 
-		$this->Model->addBehavior('Xety/Cake3Upload.Upload', [
+		$this->Model->addBehavior('sarrala/Cake3Upload.Upload', [
 			'fields' => [
 				'avatar' => [
 					'path' => 'upload' . DS . ':id' . DS . ':md5',
@@ -194,7 +194,7 @@ class UploadBehaviorTest extends TestCase {
 		$this->assertTrue(file_exists(WWW_ROOT . $after->avatar), 'The new file should be created.');
 
 		$this->Model->removeBehavior('Upload');
-		$this->Model->addBehavior('Xety/Cake3Upload.Upload', [
+		$this->Model->addBehavior('sarrala/Cake3Upload.Upload', [
 			'fields' => [
 				'avatar' => [
 					'path' => 'upload' . DS . ':id' . DS . ':md5',
@@ -226,7 +226,7 @@ class UploadBehaviorTest extends TestCase {
 			'size' => 201
 		];
 
-		$this->Model->addBehavior('Xety/Cake3Upload.Upload', [
+		$this->Model->addBehavior('sarrala/Cake3Upload.Upload', [
 			'fields' => [
 				'avatar' => [
 					'path' => 'upload' . DS . ':id' . DS . ':id'
@@ -255,7 +255,7 @@ class UploadBehaviorTest extends TestCase {
 			'size' => 201
 		];
 
-		$this->Model->addBehavior('Xety/Cake3Upload.Upload', [
+		$this->Model->addBehavior('sarrala/Cake3Upload.Upload', [
 			'fields' => [
 				'avatar' => [
 					'path' => 'upload' . DS . ':id' . DS . ':md5'
@@ -268,7 +268,7 @@ class UploadBehaviorTest extends TestCase {
 		$before = $this->Model->save($entity);
 
 		$this->Model->removeBehavior('Upload');
-		$this->Model->addBehavior('Xety/Cake3Upload.Upload', [
+		$this->Model->addBehavior('sarrala/Cake3Upload.Upload', [
 			'fields' => [
 				'avatar' => [
 					'path' => 'upload' . DS . ':id' . DS . ':md5',
@@ -301,7 +301,7 @@ class UploadBehaviorTest extends TestCase {
 			'size' => 201
 		];
 
-		$this->Model->addBehavior('Xety/Cake3Upload.Upload', [
+		$this->Model->addBehavior('sarrala/Cake3Upload.Upload', [
 			'suffix' => '_test',
 			'fields' => [
 				'avatar' => [
@@ -318,7 +318,7 @@ class UploadBehaviorTest extends TestCase {
 		suffix match.');
 
 		$this->Model->removeBehavior('Upload');
-		$this->Model->addBehavior('Xety/Cake3Upload.Upload', [
+		$this->Model->addBehavior('sarrala/Cake3Upload.Upload', [
 			'suffix' => '_testFail',
 			'fields' => [
 				'avatar' => [

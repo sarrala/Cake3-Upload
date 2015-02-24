@@ -101,4 +101,4 @@ Log::config([
 		'file' => 'error',
 	]
 ]);
-Plugin::load('Xety/Cake3Upload', ['path' => ROOT]);
+Plugin::load('sarrala/Cake3Upload', ['path' => ROOT]);
