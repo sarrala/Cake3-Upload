@@ -47,7 +47,7 @@ class CsvRecognizer extends Recognizer {
 		
 		// Validate csv using collected information
 		$rows = 1;
-		while (($data = fgetcsv($file->handle, self::MAX_LINE_LENGTH, ",")) !== false) {
+		while (($data = fgetcsv($file->handle, self::MAX_LINE_LENGTH, $separator)) !== false) {
 			
 			$columncount = count($data);
 			if ($columncount !== $requirecount) {
