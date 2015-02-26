@@ -3,7 +3,7 @@ namespace sarrala\Cake3Upload\Recognizer;
 
 use Cake\Filesystem\File;
 
-class FinfoRecognizer extends Recognizer {
+class FinfoRecognizer extends FileRecognizer {
 
 	public function recognize(File $file) {
 		

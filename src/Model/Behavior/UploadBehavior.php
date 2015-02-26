@@ -53,6 +53,9 @@ class UploadBehavior extends BaseUploadBehavior {
 			if ($file_path) {
 				
 				$entity->set( $field, $this->_prefix . $uploadPath );
+				if ($fieldOption['name']) {
+					$entity->set( $fieldOption['name'], $file['name'] );
+				}
 				
 				$this->_postProcessUpload($entity, new File($file_path, false));
 			}

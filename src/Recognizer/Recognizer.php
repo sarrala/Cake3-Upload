@@ -13,11 +13,11 @@ abstract class Recognizer {
 		$this->_encoding = $encoding;
 	}
 	
+	public function recognize($data) {}
+	
 	public function canImprove( $mime ) {
 		return false;
 	}
-	
-	abstract public function recognize(File $file);
 	
 	public function setType( $mime ) {
 		$this->_type = $mime;
