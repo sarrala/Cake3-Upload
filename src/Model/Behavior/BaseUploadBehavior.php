@@ -20,6 +20,7 @@ abstract class BaseUploadBehavior extends Behavior {
 			'suffix' => '_file', 
 			'recognizers' => false, 
 			'mimeField' => 'mime',
+			'encodingField' => 'encoding',
 			'defaultMime' => '',
 			'defaultEncoding' => '',
 			'unlinkOnDelete' => true,
@@ -113,6 +114,7 @@ abstract class BaseUploadBehavior extends Behavior {
 			$file->open('r');
 			
 			$file_mime = false;
+			$file_encoding = false;
 			
 			$this->_loadRecognizers();
 			
@@ -127,17 +129,24 @@ abstract class BaseUploadBehavior extends Behavior {
 				
 				// Execute recognizer and fetch results
 				$recognizer->setType( $file_mime );
+				$recognizer->setEncoding( $file_encoding );
 				$recognizer->recognize( $file );
 				$file_mime = $recognizer->getType();
-				//$file_encoding = $recognizer->getEncoding();
+				$file_encoding = $recognizer->getEncoding();
 				
 			}
 			
 			// Set information to entity
 			$file_mime = $file_mime ? $file_mime : $config['defaultMime'];
-			$entity->set( $config['mimeField'], $file_mime );
+			if (isset($config['mimeField'])) {
+				$entity->set( $config['mimeField'], $file_mime ? $file_mime : 'Error: 1;' );
+			}
+			
+			if (isset($config['encodingField'])) {
+				$entity->set( $config['encodingField'], $file_encoding ? $file_encoding : 'Error: 1;' );
+			}
+
 		}
-		
 	}
 	
 	/**

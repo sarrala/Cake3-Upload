@@ -5,7 +5,11 @@ use Cake\Filesystem\File;
 
 class FinfoRecognizer extends FileRecognizer {
 
-	public function recognize(File $file) {
+	public function recognize($file) {
+		
+		if ( ! parent::recognize($file)) {
+			return false;
+		}
 		
 		$file_mime = false;
 		$file_encoding = false;

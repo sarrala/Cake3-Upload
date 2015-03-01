@@ -3,12 +3,12 @@ namespace sarrala\Cake3Upload\Recognizer;
 
 use Cake\Filesystem\File;
 
-class CsvRecognizer extends Recognizer {
+class CsvRecognizer extends FileRecognizer {
 	
 	const MIN_ROWS = 5;
 	const MAX_LINE_LENGTH = 4000;
 	
-	protected $_separators = [',', ';', '|', ':'];
+	protected $_separators = [',', ';', '|', ':', "\t"];
 	
 	public function canImprove( $mime ) {
 		switch ($mime) {
@@ -18,7 +18,11 @@ class CsvRecognizer extends Recognizer {
 		return false;
 	}
 	
-	public function recognize(File $file) {
+	public function recognize($file) {
+		
+		if ( ! parent::recognize($file)) {
+			return false;
+		}
 		
 		$data = false;
 		$separator = false;
@@ -33,8 +37,10 @@ class CsvRecognizer extends Recognizer {
 				// but instead, look for most probable pattern and simply fall back
 				// selecting separator by highest character count and other
 				// probability factors (requires some research and statistics).
-				$separator = $sep;
-				break;
+				$count = count($data);
+				if ($count > 0) {
+					$separator[$count] = $sep;
+				}
 			}
 		}
 		
@@ -43,7 +49,9 @@ class CsvRecognizer extends Recognizer {
 			return false;
 		}
 		
-		$requirecount = count($data);
+		// Get separator that has highest char count
+		$requirecount = max(array_keys($separator));
+		$separator = $separator[$requirecount];
 		
 		// Validate csv using collected information
 		$rows = 1;
@@ -61,6 +69,7 @@ class CsvRecognizer extends Recognizer {
 		if ($rows >= self::MIN_ROWS) {
 			// It walks like a duck and quacks like a duck, 
 			// so I think it most probably is what it looks like
+			$this->setEncoding('Separator: '.$separator);
 			$this->setType('text/csv');
 			return 'text/csv';
 		}

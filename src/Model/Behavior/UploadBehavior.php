@@ -62,7 +62,6 @@ class UploadBehavior extends BaseUploadBehavior {
 			
 			$entity->unsetProperty( $virtualField );
 		}
-	
 	}
 	
 	public function beforeDelete(Event $event, Entity $entity, $options = []) {

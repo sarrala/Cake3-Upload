@@ -13,7 +13,9 @@ abstract class Recognizer {
 		$this->_encoding = $encoding;
 	}
 	
-	public function recognize($data) {}
+	public function recognize($data) {
+		return true;
+	}
 	
 	public function canImprove( $mime ) {
 		return false;
