@@ -71,6 +71,20 @@ class CsvRecognizer extends FileRecognizer {
 			// so I think it most probably is what it looks like
 			$this->setEncoding('Separator: '.$separator);
 			$this->setType('text/csv');
+			
+			// It also made everything look like there's been a duck here... 
+			$duck_training = $file->read();
+			if (mb_detect_encoding($duck_training, 'UTF-8', true) === false) {
+				$trained_duck = iconv('ISO-8859-1', 'UTF-8', $duck_training);
+				$file->close();
+				$file->delete();
+				$file->create();
+				$file->open('w');
+				$file->write($trained_duck);
+				$file->close();
+				$file->open();
+			}
+			
 			return 'text/csv';
 		}
 		return false;

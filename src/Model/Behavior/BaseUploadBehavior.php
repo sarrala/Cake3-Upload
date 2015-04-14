@@ -24,7 +24,8 @@ abstract class BaseUploadBehavior extends Behavior {
 			'defaultMime' => '',
 			'defaultEncoding' => '',
 			'unlinkOnDelete' => true,
-			'fields' => [] 
+			'fields' => [],
+			'templates' => []
 	];
 	
 	protected $_recognizers = [];
@@ -234,16 +235,14 @@ abstract class BaseUploadBehavior extends Behavior {
 		
 		if ($file->exists()) {
 			$file->delete();
-			return true;
 		}
 		
-		return false;
-	
+		return true;
 	}
 
 	protected function _deleteUpload(Entity $entity, $field = false, array $options = []) {
 		
-		if ($field === false) {
+		if ($field === false || ! $this->_config['unlinkOnDelete']) {
 			return true;
 		}
 		
@@ -275,14 +274,39 @@ abstract class BaseUploadBehavior extends Behavior {
 	/**
 	 * Get the path formatted without its identifiers to upload the file.
 	 *
-	 * Identifiers :
-	 * :id : Id of the Entity.
-	 * :md5 : A random and unique identifier with 32 characters.
-	 * :y : Based on the current year.
-	 * :m : Based on the current month.
+	 * Identifiers:
+	 * :uid			Logged in user id.
+	 * :id			Id of the Entity.
+	 * :mime		File mime type. Currently useless, requires fix.
+	 * :md5			File contents checksum.
+	 * :sha256		File contents checksum.
+	 * :fast-hash	Random MD5 hash.
+	 * :fast-uniq	Random SHA-256 hash.
+	 * :y			Current year.
+	 * :m			Current month.
+	 * :d			Current date.
+	 * :date		Current date in 1970-12-30 format.
+	 * :time		Current time in 235959 format.
+	 * :extcase		File extension in its original form.
+	 * :ext			File extension in all-lowercase format.
 	 *
-	 * i.e : upload/:id/:md5 -> upload/2/5e3e0d0f163196cb9526d97be1b2ce26.jpg
-	 *
+	 * Examples:
+	 * 
+	 * 	- Template: upload/:uid/:md5
+	 * 	- Result: upload/2/5e3e0d0f163196cb9526d97be1b2ce26
+	 * 
+	 * 	- Template: upload/:uid/:date_:time:ext
+	 * 	- Result: upload/2/1970-12-30_235959jpg
+	 * 
+	 * 	- Template: upload/:id/:date_:time.:ext
+	 * 	- Result: upload/10/1970-12-30_235959.jpg
+	 * 
+	 * 	- Template: :id-:uid-:fast-hash
+	 * 	- Result: 10-2-cd0f1a9c68d2a5dbd98e80f4cc054c33
+	 * 
+	 * 	- Template: :id-:uid-:fast-uniq
+	 * 	- Result: 10-2-e0db5ac43ad9e152ad6c889e5ed4325987f3a6a7be9689a9d7d11be95236d68a
+	 * 
 	 * @param \Cake\ORM\Entity $entity
 	 *        	The entity that is going to be saved.
 	 * @param bool|string $path
@@ -300,25 +324,32 @@ abstract class BaseUploadBehavior extends Behavior {
 		
 		$path = trim( $path, DS );
 		
-		$identifiers = [ 
-				':uid' => function () use($options) { return $options['loggedInUser']; },
+		$identifiers = array_merge([ 
+				':uid' => function ($e) use($options) { return $options['loggedInUser']; },
 				':id' => $entity->id, 
 				//':mime' => *CURRENTLY USELESS, REQUIRES EXECUTION REORDERING*
-				':md5' => function () use($source_file) { return md5_file($source_file); }, 
-				':sha256' => function () use($source_file) { return hash_file('sha256',$source_file); },
-				':fast-hash' => function () { return md5( uniqid( uniqid('', rand(0,1)), true )); }, 
-				':fast-uniq' => function () { return hash('sha256', mt_rand() . uniqid( uniqid('', rand(0,1)), true ) . uniqid('', mt_rand()%2 )); },
-				':y' => date( 'Y' ), 
-				':m' => date( 'm' ) 
-		];
+				':md5' => function ($e) use($source_file) { return md5_file($source_file); }, 
+				':sha256' => function ($e) use($source_file) { return hash_file('sha256',$source_file); },
+				':fast-hash' => function ($e) { return md5( uniqid( uniqid('', rand(0,1)), true )); }, 
+				':fast-uniq' => function ($e) { return hash('sha256', mt_rand() . uniqid( uniqid('', rand(0,1)), true ) . uniqid('', mt_rand()%2 )); },
+				':date' => date( 'Y-m-d' ),
+				':time' => date( 'His' ),
+				':y' => date( 'Y' ),
+				':m' => date( 'm' ),
+				':d' => date( 'd' ),
+				':extcase' => $extension,
+				':ext' => strtolower( $extension ),
+				':.extcase' => '.' . $extension,
+				':.ext' => '.' . strtolower( $extension ),
+		],$this->_config['templates']);
 		
 		foreach ($identifiers as $src => $dst) {
 			if (mb_strpos($path, $src) !== false) {
-				$path = strtr($path, [$src => is_callable($dst) ? $dst() : $dst]);
+				$path = strtr($path, [$src => is_callable($dst) ? $dst($entity) : $dst]);
 			}
 		}
 		
-		return $path . '.' . strtolower( $extension );
+		return $path;
 	
 	}
 
