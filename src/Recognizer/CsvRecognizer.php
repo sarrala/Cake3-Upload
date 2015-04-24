@@ -5,7 +5,7 @@ use Cake\Filesystem\File;
 
 class CsvRecognizer extends FileRecognizer {
 	
-	const MIN_ROWS = 5;
+	const MIN_ROWS = 1;
 	const MAX_LINE_LENGTH = 4000;
 	
 	protected $_separators = [',', ';', '|', ':', "\t"];

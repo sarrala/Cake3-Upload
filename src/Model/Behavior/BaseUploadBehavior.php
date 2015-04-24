@@ -262,8 +262,18 @@ abstract class BaseUploadBehavior extends Behavior {
 		
 		$file = new File( $this->_config['root'] . $entity->$field, false );
 		
-		if ($file->exists()) {
-			return $file->delete();
+		// Check if this file has other references (db rows)
+		if ($this->_table->find()->where(["$field =" => $entity->$field])->count() == 1) {
+			
+			if ($file->exists()) {
+				error_log('FILE DELETED');
+				return $file->delete();
+			} else {
+				error_log('FILE NOT FOUND: '.$file->path);
+			}
+			
+		} else {
+			error_log('FILE REFERENCE COUNT > 1');
 		}
 		
 		// Already gone
