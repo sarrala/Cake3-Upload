@@ -1,6 +1,9 @@
 # Cake3 Upload
 A Cake3 plugin to upload files.
 
+This version (based on [Xety/Cake3-Upload](https://github.com/Xety/Cake3-Upload)) is extended with file recognizers and a lot more filename template field identifiers.
+Documentation is not up to date but plugin should work if you get paths right.
+
 [![Build Status](https://img.shields.io/travis/sarrala/Cake3-Upload.svg?style=flat-square)](https://travis-ci.org/sarrala/Cake3-Upload)
 [![Coverage Status](https://img.shields.io/coveralls/sarrala/Cake3-Upload/master.svg?style=flat-square)](https://coveralls.io/r/sarrala/Cake3-Upload)
 [![Scrutinizer](https://img.shields.io/scrutinizer/g/sarrala/Cake3-Upload.svg?style=flat-square)](https://scrutinizer-ci.com/g/sarrala/Cake3-Upload)
