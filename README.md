@@ -46,10 +46,14 @@ $this->addBehavior('sarrala/Cake3Upload.Upload', [
 ```
 
 ### Identifiers
+
+SEE BEHAVIOR SOURCE CODE FOR FULL LIST OF IDENTIFIERS
+Also see example about how to add your own template identifiers.
+
 * **:id** Id of the Entity (It can be the user Id if you are using this for the users table for example)
-* **:md5** A random and unique identifier with 32 characters. i.e : *bbebb3c3c5e76a46c3dca92c9395ee65*
-* **:y** Based on the current year. i.e : *2014*
-* **:m** Based on the current month. i.e : *09*
+* **:md5** Actual file contents md5 checksum. i.e : *bbebb3c3c5e76a46c3dca92c9395ee65*
+* **:y** Based on the current year. i.e : *2015*
+* **:m** Based on the current month. i.e : *06*
 
 To create an input to upload a file, just use the this rule : **fieldName_file**. Example :
 ``` php
@@ -131,22 +135,22 @@ To create an input to upload a file, just use the this rule : **fieldName_file**
      *       webroot/upload/avatar
      *
      * In the database, the record will look like that :
-     *      ../upload/avatar/1/bbebb3c3c5e76a46c3dca92c9395ee65.png
+     *      upload/avatar/1/bbebb3c3c5e76a46c3dca92c9395ee65_v1.png
      */
-
-    $this->addBehavior('Upload', [
-    		'fields' => [
-    			'avatar' => [
-    				'path' => 'upload/avatar/:id/:md5',
-    				'prefix' => '../'
-    			]
-    		]
-    	]
-    );
-
-    // In a view, with the Html Helper:
-    <?= $this->Html->image($User->avatar) ?>
-    // Output : <img src="/img/../upload/avatar/1/bbebb3c3c5e76a46c3dca92c9395ee65.png" alt="">
+	$this->addBehavior('sarrala/Cake3Upload.Upload', [
+		'root' => UPLOAD_ROOT,
+		'unlinkOnDelete' => true,
+		'recognizers' => ['Finfo', 'Csv'],
+		'fields' => [
+			'path' => [
+				'path' => 'upload/avatar/:owner/:md5_v:versions:ext',
+				'name' => 'name'
+			]
+		],
+		'templates' => [
+			':version' => function($e){return count($e->versions)+1;}
+		]
+	]);
     ```
 
 ## Contribute
