@@ -266,14 +266,11 @@ abstract class BaseUploadBehavior extends Behavior {
 		if ($this->_table->find()->where(["$field =" => $entity->$field])->count() == 1) {
 			
 			if ($file->exists()) {
-				error_log('FILE DELETED');
 				return $file->delete();
-			} else {
-				error_log('FILE NOT FOUND: '.$file->path);
 			}
-			
+						
 		} else {
-			error_log('FILE REFERENCE COUNT > 1');
+			// error_log('FILE REFERENCE COUNT > 1');
 		}
 		
 		// Already gone
@@ -327,13 +324,11 @@ abstract class BaseUploadBehavior extends Behavior {
 	 * @return bool string
 	 */
 	protected function _getUploadPath(Entity $entity, $path = false, $source_file = false, $extension = false, $options = []) {
-		error_log( var_export( $path,true) );
-		error_log( var_export( $source_file,true) );
-		error_log( var_export( $extension,true) );
-		error_log( var_export( $options,true) );
+		
 		if ($path === false) {
 			return false;
 		}
+		
 		$extension = $extension ? $extension : '';
 		$path = trim( $path, DS );
 		

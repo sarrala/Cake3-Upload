@@ -27,7 +27,7 @@ class UploadBehavior extends BaseUploadBehavior {
 	 * @return void
 	 */
 	public function beforeSave(Event $event, Entity $entity, $options = []) {
-		error_log('AT UPLOAD BEHAVIOR');
+		
 		foreach ( $this->_config['fields'] as $field => $fieldOption ) {
 			
 			$virtualField = $fieldOption['virtualField'];
