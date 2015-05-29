@@ -167,7 +167,7 @@ abstract class BaseUploadBehavior extends Behavior {
 	 * @return mixed|bool|string False or file path
 	 */
 	protected function _moveFile(Entity $entity, $source = false, $destination = false, $field = false, array $options = []) {
-
+		
 		if ($source === false || $destination === false || $field === false) {
 			return false;
 		}
@@ -327,15 +327,19 @@ abstract class BaseUploadBehavior extends Behavior {
 	 * @return bool string
 	 */
 	protected function _getUploadPath(Entity $entity, $path = false, $source_file = false, $extension = false, $options = []) {
-
-		if ($extension === false || $path === false) {
+		error_log( var_export( $path,true) );
+		error_log( var_export( $source_file,true) );
+		error_log( var_export( $extension,true) );
+		error_log( var_export( $options,true) );
+		if ($path === false) {
 			return false;
 		}
-		
+		$extension = $extension ? $extension : '';
 		$path = trim( $path, DS );
 		
 		$identifiers = array_merge([ 
 				':uid' => function ($e) use($options) { return $options['loggedInUser']; },
+				':owner' => function ($e) { return $e->user_id; },
 				':id' => $entity->id, 
 				//':mime' => *CURRENTLY USELESS, REQUIRES EXECUTION REORDERING*
 				':md5' => function ($e) use($source_file) { return md5_file($source_file); }, 
