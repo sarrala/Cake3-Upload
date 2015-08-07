@@ -337,6 +337,8 @@ abstract class BaseUploadBehavior extends Behavior {
 				':owner' => function ($e) { return $e->user_id; },
 				':id' => $entity->id, 
 				//':mime' => *CURRENTLY USELESS, REQUIRES EXECUTION REORDERING*
+				':size' => function ($e) use($source_file) { return filesize($source_file); }, 
+				':hsize' => function ($e) use($source_file) { return str_pad(base_convert(filesize($source_file),10,16),8,'0',STR_PAD_LEFT); }, 
 				':md5' => function ($e) use($source_file) { return md5_file($source_file); }, 
 				':sha256' => function ($e) use($source_file) { return hash_file('sha256',$source_file); },
 				':fast-hash' => function ($e) { return md5( uniqid( uniqid('', rand(0,1)), true )); }, 
